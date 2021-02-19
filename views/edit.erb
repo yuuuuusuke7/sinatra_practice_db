@@ -1,0 +1,12 @@
+<form action="/memos/<%= @memo['id'] %>" method="post">
+　<h2>メモタイトル</h2>
+  <div>
+    <input type="text" class="form" name= "title" value="<%= @memo['title'] %>" required>
+  </div>
+  <h2>内容</h2>
+  <div>
+    <textarea name="body" class="form_body" required><%= @memo['body'] %></textarea>
+  </div>
+  <input type="hidden" name="_method" value="PUT">
+  <input type="submit" class="btn" value="編集完了">
+</form>
