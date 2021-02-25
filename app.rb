@@ -21,7 +21,7 @@ class Memo
   end
 
   def self.show_memo(id: memo_id)
-    @connection.exec_prepared('show', [id])
+    @connection.exec_prepared('show', [id]) { |result| result[0] }
   end
 
   def self.update_memo(title: memo_title, body: memo_body)
@@ -50,7 +50,7 @@ end
 
 get '/memos/:id' do
   @title_head = 'show'
-  @memo = Memo.show_memo(id: params[:id]).first
+  @memo = Memo.show_memo(id: params[:id])
   erb :show
 end
 
@@ -61,7 +61,7 @@ end
 
 get '/memos/:id/edit' do
   @title_head = 'edit'
-  @memo = Memo.show_memo(id: params[:id]).first
+  @memo = Memo.show_memo(id: params[:id])
   erb :edit
 end
 
