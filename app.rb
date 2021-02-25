@@ -9,7 +9,7 @@ class Memo
   @connection.prepare('all', 'SELECT * FROM posts ORDER BY id asc;')
   @connection.prepare('create', 'INSERT INTO posts(title, body) VALUES ($1, $2)')
   @connection.prepare('show', 'SELECT * FROM posts WHERE id = $1')
-  @connection.prepare('update', 'UPDATE posts SET (title, body) = ($1, $2)')
+  @connection.prepare('update', 'UPDATE posts SET (title, body) = ($2, $3) WHERE id = $1')
   @connection.prepare('destroy', 'DELETE FROM posts WHERE id = $1')
 
   def self.all_memos
@@ -24,7 +24,7 @@ class Memo
     @connection.exec_prepared('show', [id]) { |result| result[0] }
   end
 
-  def self.update_memo(title: memo_title, body: memo_body)
+  def self.update_memo(id: memo_id, title: memo_title, body: memo_body)
     @connection.exec_prepared('update', [id, title, body])
   end
 
@@ -55,7 +55,7 @@ get '/memos/:id' do
 end
 
 post '/memos' do
-  Memo.create_memo(title: h(params[:title]), body: h(params[:body]))
+  Memo.create_memo(title: params[:title], body: params[:body])
   redirect '/'
 end
 
