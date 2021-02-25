@@ -6,7 +6,7 @@ require 'pg'
 
 class Memo
   @connection = PG.connect(dbname: 'memoapp')
-  @connection.prepare('all', 'SELECT * FROM posts')
+  @connection.prepare('all', 'SELECT * FROM posts ORDER BY id asc;')
   @connection.prepare('create', 'INSERT INTO posts(title, body) VALUES ($1, $2)')
   @connection.prepare('show', 'SELECT * FROM posts WHERE id = $1')
   @connection.prepare('update', 'UPDATE posts SET (title, body) = ($1, $2)')
