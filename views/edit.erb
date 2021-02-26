@@ -1,4 +1,4 @@
-<form action="/memos/<%= h(@memo['id']) %>" method="post">
+<form action="/memos/<%= @memo['id'] %>" method="post">
 　<h2>メモタイトル</h2>
   <div>
     <input type="text" class="form" name= "title" value="<%= h(@memo['title']) %>" required>
