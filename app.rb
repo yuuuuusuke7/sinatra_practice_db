@@ -4,7 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'pg'
 
-class MemoPrepare
+class Memo
   def self.prepare_db
     return if @connection
 
@@ -15,13 +15,7 @@ class MemoPrepare
     @connection.prepare('update', 'UPDATE posts SET (title, body) = ($2, $3) WHERE id = $1')
     @connection.prepare('destroy', 'DELETE FROM posts WHERE id = $1')
   end
-end
 
-before do
-  MemoPrepare.prepare_db
-end
-
-class Memo
   def self.all_memos
     @connection.exec_prepared('all')
   end
@@ -41,6 +35,10 @@ class Memo
   def self.destroy_memo(id: memo_id)
     @connection.exec_prepared('destroy', [id])
   end
+end
+
+before do
+  Memo.prepare_db
 end
 
 get '/' do
