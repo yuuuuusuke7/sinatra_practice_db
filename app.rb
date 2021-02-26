@@ -11,7 +11,7 @@ class Memo
     @connection = PG.connect(dbname: 'memoapp')
     @connection.prepare('all', 'SELECT * FROM posts ORDER BY id asc;')
     @connection.prepare('create', 'INSERT INTO posts(title, body) VALUES ($1, $2)')
-    @connection.prepare('show', 'SELECT * FROM posts WHERE id = $1')
+    @connection.prepare('find', 'SELECT * FROM posts WHERE id = $1')
     @connection.prepare('update', 'UPDATE posts SET (title, body) = ($2, $3) WHERE id = $1')
     @connection.prepare('destroy', 'DELETE FROM posts WHERE id = $1')
   end
@@ -24,8 +24,8 @@ class Memo
     @connection.exec_prepared('create', [title, body])
   end
 
-  def self.show_memo(id: memo_id)
-    @connection.exec_prepared('show', [id]) { |result| result[0] }
+  def self.find_memo(id: memo_id)
+    @connection.exec_prepared('find', [id]) { |result| result[0] }
   end
 
   def self.update_memo(id: memo_id, title: memo_title, body: memo_body)
@@ -58,7 +58,7 @@ end
 
 get '/memos/:id' do
   @title_head = 'show'
-  @memo = Memo.show_memo(id: params[:id])
+  @memo = Memo.find_memo(id: params[:id])
   erb :show
 end
 
@@ -69,7 +69,7 @@ end
 
 get '/memos/:id/edit' do
   @title_head = 'edit'
-  @memo = Memo.show_memo(id: params[:id])
+  @memo = Memo.find_memo(id: params[:id])
   erb :edit
 end
 
